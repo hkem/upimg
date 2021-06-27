@@ -16,7 +16,15 @@ public class User implements Serializable {
     public int state;
     public String delete_time;
     public String pass_word;
+    public String user_number;
 
+    public String getUser_number() {
+        return user_number;
+    }
+
+    public void setUser_number(String user_number) {
+        this.user_number = user_number;
+    }
 
     public String getPass_word() {
         return pass_word;

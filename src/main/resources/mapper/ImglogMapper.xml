@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.upimage.upimg.mapper.ImglogMapper">
+    <!--    添加-->
+    <insert id="imglogadd" parameterType="com.upimage.upimg.entity.Imglog" useGeneratedKeys="true" keyProperty="imglog_id">
+        insert into imglog(imglog_id,u_id,img_path,created_at,updated_at) value (#{imglog_id},#{u_id},#{img_path},#{created_at},#{updated_at});
+    </insert>
+
+    <!--  查询  -->
+    <select id="imgloglist" parameterType="com.upimage.upimg.entity.Imglog" resultType="com.upimage.upimg.entity.Imglog">
+        select * from imglog
+        <if test="u_id != null">
+            where u_id=#{u_id}
+        </if>
+        <if test="page != null">
+            LIMIT #{page},#{pagecount}
+        </if>
+    </select>
+
+    <!--  获取全部条数  -->
+    <select id="imglogcount" parameterType="com.upimage.upimg.entity.Imglog" resultType="com.upimage.upimg.entity.Imglog">
+        select count(*) as listcount from imglog
+        <if test="u_id != null">
+            where u_id=#{u_id}
+        </if>
+    </select>
+
+    <!--  删除  -->
+    <delete id="imglogdelete" parameterType="com.upimage.upimg.entity.Imglog">
+        delete from imglog where u_id=#{u_id} and imglog_id=#{imglog_id}
+    </delete>
+</mapper>

@@ -19,10 +19,15 @@ public class UserServiceimpl implements UserService {
         return UserMapper.findAll();
     }
 
-
     //注册
     @Override
     public int userinsert(User user){
         return UserMapper.userinsert(user);
+    }
+
+    //查询
+    @Override
+    public List<User> userselect(User user){
+        return UserMapper.userselect(user);
     }
 }

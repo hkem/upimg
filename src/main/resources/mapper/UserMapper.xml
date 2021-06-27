@@ -6,8 +6,16 @@
     </select>
 
     <!--    添加-->
-    <insert id="userinsert" parameterType="com.upimage.upimg.entity.User">
-        insert into user(user_id,user_head,user_name,age,sex,created_at,updated_at,pass_word) value (#{user_id},#{user_head},#{user_name},#{age},#{sex},#{created_at},#{updated_at},#{pass_word});
+    <insert id="userinsert" parameterType="com.upimage.upimg.entity.User" useGeneratedKeys="true" keyProperty="user_id">
+        insert into user(user_id,user_head,user_name,user_number,age,sex,created_at,updated_at,pass_word) value (#{user_id},#{user_head},#{user_name},#{user_number},#{age},#{sex},#{created_at},#{updated_at},#{pass_word});
     </insert>
+
+    <!--  查询  -->
+    <select id="userselect" parameterType="com.upimage.upimg.entity.User" resultType="com.upimage.upimg.entity.User">
+        select * from user
+        <if test="user_number != null">
+            where user_number=#{user_number}
+        </if>
+    </select>
 
 </mapper>

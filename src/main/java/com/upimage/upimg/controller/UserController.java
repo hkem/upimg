@@ -3,13 +3,18 @@ package com.upimage.upimg.controller;
 import com.upimage.upimg.entity.User;
 import com.upimage.upimg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -25,22 +30,28 @@ public class UserController {
     }
 
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    @Resource
+    private RedisUtil redisutil;
 
     //注册
+    @AccessRequired
     @RequestMapping("/user/userinsert")
     public String userinsert(){
-        User user = new User();
-        user.setUser_id(2);
-        user.setUser_head("www.women");
-        user.setUser_name("第二个");
-        user.setAge(99);
-        user.setSex("男");
-        String time = sdf.format(new Date());
-        user.setCreated_at(time);
-        user.setUpdated_at(time);
-        user.setPass_word("9999");
-        userService.userinsert(user);
-        return "ok";
+//        //加密
+//        String jiami = bCryptPasswordEncoder.encode("9999");
+//        //解密
+//        boolean awdwad = bCryptPasswordEncoder.matches("9999","$2a$10$7AAXawPAEudDVTaLAJZtOOVuOogZxkg7SkG4xKUOEr1WM2x8H8NmO");
+//        Map data = new HashMap();
+//        data.put("name","");
+//        data.put("age","age");
+//        boolean redisutil2 =redisutil.boolkey("$2a$10$AujwXRJJA.8n/IyuBA5HMOytK32jwG4QfxE2NN3Mf4.HD01dYzvjq");
+        Object awd = redisutil.get("$2a$10$AujwXRJJA.8n/IyuBA5HMOytK32jwG4QfxE2NN3Mf4.HD01dYzvjq");
+
+        return awd.toString();
     }
 
 }

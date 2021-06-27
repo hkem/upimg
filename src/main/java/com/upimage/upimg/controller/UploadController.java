@@ -1,5 +1,7 @@
 package com.upimage.upimg.controller;
 
+import com.upimage.upimg.entity.Imglog;
+import com.upimage.upimg.service.ImglogService;
 import oracle.jrockit.jfr.VMJFR;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +29,15 @@ public class UploadController {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
     //返回函数
     RevertMsg msg = new RevertMsg();
+
+
+
+
+    @Resource
+    private RedisUtil redisutil;
+
+    @Autowired
+    private ImglogService ImglogService;
 
     //上传图片文件
     @PostMapping("/upload/uploadimg")
@@ -45,32 +57,38 @@ public class UploadController {
         try {
             // 文件保存
             uploadFile.transferTo(new File(folder, newName));
+
+            String path = "/uploaded/" + format + newName;
+
             // 返回上传文件的访问路径
             String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/upimg/uploaded/" + format + newName;
             //构建返回方式
             Map data = new HashMap();
             data.put("img_url",filePath);
+
+            //判断有没有token 有的话调用保存接口
+            String token = req.getHeader("token");
+            if(token != null){
+
+                String struserid = redisutil.get(token).toString();
+                if(struserid != null){
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    String time = sdf2.format(new Date());
+                    int user_id = Integer.parseInt(struserid);
+                    Imglog img = new Imglog();
+                    img.setU_id(user_id);
+                    img.setImg_path(path);
+                    img.setCreated_at(time);
+                    img.setUpdated_at(time);
+                    ImglogService.imglogadd(img);
+                }
+            }
+
             return msg.Json_msg(1,"ok",data);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return msg.Json_msg(0,"上传失败",new HashMap());
     }
-
-
-    //测试返回
-    @PostMapping("/upload/msg")
-    public Map jjson(HttpServletRequest req){
-
-        Map data = new HashMap();
-        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        data.put("id",111);
-        data.put("time",time);
-        String realPath = req.getServletContext().getRealPath("");
-        String awdaa = realPath;
-        data.put("gen",awdaa);
-        Map awd= msg.Json_msg(0,"上传失败",data);
-        return awd;
-    }
-
 }

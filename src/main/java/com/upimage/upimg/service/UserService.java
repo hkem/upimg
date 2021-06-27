@@ -11,4 +11,7 @@ public interface UserService {
     //注册
     int userinsert(User user);
 
+    //查询
+    List<User> userselect(User user);
+
 }
