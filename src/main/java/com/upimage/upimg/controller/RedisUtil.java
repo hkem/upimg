@@ -37,7 +37,12 @@ public class RedisUtil {
      * @return 值
      */
     public static Object get(String key){
-        return key==null?null:redisTemplate.opsForValue().get(key);
+        try {
+            return key==null?null:redisTemplate.opsForValue().get(key);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**

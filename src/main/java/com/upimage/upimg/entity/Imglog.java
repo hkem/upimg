@@ -6,10 +6,39 @@ public class Imglog {
     public String img_path;
     public String created_at;
     public String updated_at;
+    public int browse;
+
 
     public int page;
     public int pagecount;
     public int listcount;
+
+    public String user_head;
+    public String user_name;
+
+    public String getUser_head() {
+        return user_head;
+    }
+
+    public void setUser_head(String user_head) {
+        this.user_head = user_head;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public int getBrowse() {
+        return browse;
+    }
+
+    public void setBrowse(int browse) {
+        this.browse = browse;
+    }
 
     public int getListcount() {
         return listcount;

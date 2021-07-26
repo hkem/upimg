@@ -30,4 +30,16 @@ public class UserServiceimpl implements UserService {
     public List<User> userselect(User user){
         return UserMapper.userselect(user);
     }
+
+    //更改密码
+    @Override
+    public int updatepass(User user){
+        return UserMapper.updatepass(user);
+    }
+
+    //更新资料
+    @Override
+    public int updateuserdata(User user){
+        return UserMapper.updateuserdata(user);
+    }
 }

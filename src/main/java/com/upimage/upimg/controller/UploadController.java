@@ -42,7 +42,7 @@ public class UploadController {
     //上传图片文件
     @PostMapping("/upload/uploadimg")
     public Map uploadimg(@RequestParam(value = "file",required = false) MultipartFile uploadFile, HttpServletRequest req){
-        String realPath = req.getServletContext().getRealPath("") + "uploaded/";//路径
+        String realPath = req.getServletContext().getRealPath("") + "uploaded/upimg/";//路径
         String format = sdf.format(new Date());//时间
         File folder = new File(realPath + format);//生成路径+时间
         //判断是否存在  不存在创建
@@ -50,7 +50,7 @@ public class UploadController {
             folder.mkdirs();//创建
         }
         String oldName = uploadFile.getOriginalFilename();//获取上传文件名
-        if(oldName.length() > 1024*10){ //判断文件是否超过大小
+        if(uploadFile.getSize() > 1024*1024*10){ //判断文件是否超过大小
             return msg.Json_msg(0,"文件太大了",new HashMap());
         }
         String newName = UUID.randomUUID().toString() + oldName.substring(oldName.lastIndexOf("."), oldName.length());//重新命名
@@ -58,10 +58,10 @@ public class UploadController {
             // 文件保存
             uploadFile.transferTo(new File(folder, newName));
 
-            String path = "/uploaded/" + format + newName;
+            String path = "/uploaded/upimg/" + format + newName;
 
             // 返回上传文件的访问路径
-            String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/upimg/uploaded/" + format + newName;
+            String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/upimg/uploaded/upimg/" + format + newName;
             //构建返回方式
             Map data = new HashMap();
             data.put("img_url",filePath);
@@ -69,20 +69,25 @@ public class UploadController {
             //判断有没有token 有的话调用保存接口
             String token = req.getHeader("token");
             if(token != null){
+                if(token != ""){
+                    try {
+                        String struserid = redisutil.get(token).toString();
+                        if(struserid != null){
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String time = sdf2.format(new Date());
+                            int user_id = Integer.parseInt(struserid);
+                            Imglog img = new Imglog();
+                            img.setU_id(user_id);
+                            img.setImg_path(path);
+                            img.setCreated_at(time);
+                            img.setUpdated_at(time);
+                            ImglogService.imglogadd(img);
+                        }
+                    }catch (Exception e){
 
-                String struserid = redisutil.get(token).toString();
-                if(struserid != null){
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                    String time = sdf2.format(new Date());
-                    int user_id = Integer.parseInt(struserid);
-                    Imglog img = new Imglog();
-                    img.setU_id(user_id);
-                    img.setImg_path(path);
-                    img.setCreated_at(time);
-                    img.setUpdated_at(time);
-                    ImglogService.imglogadd(img);
+                    }
                 }
+
             }
 
             return msg.Json_msg(1,"ok",data);

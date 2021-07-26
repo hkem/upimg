@@ -38,4 +38,9 @@ public class ImglogServiceimpl implements ImglogService {
         return ImglogMapper.imglogdelete(imglog);
     }
 
+    @Override
+    public int browseimage(Imglog imglog){
+        return ImglogMapper.browseimage(imglog);
+    }
+
 }

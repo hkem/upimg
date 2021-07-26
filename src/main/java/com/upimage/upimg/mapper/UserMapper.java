@@ -16,9 +16,11 @@ public interface UserMapper {
     //查询
     List <User> userselect(User user);
 
+    //更改密码
+    int updatepass(User user);
 
-    //登录
-
+    //更新资料
+    int updateuserdata(User user);
 
 
 }

@@ -19,4 +19,7 @@ public interface ImglogMapper {
 
     //删除
     int imglogdelete(Imglog imglog);
+
+    //浏览加1
+    int browseimage(Imglog imglog);
 }

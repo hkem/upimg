@@ -14,4 +14,9 @@ public interface UserService {
     //查询
     List<User> userselect(User user);
 
+    //更改密码
+    int updatepass(User user);
+
+    //更新资料
+    int updateuserdata(User user);
 }

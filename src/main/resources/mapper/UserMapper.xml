@@ -18,4 +18,14 @@
         </if>
     </select>
 
+    <!--  更改密码  -->
+    <update id="updatepass" parameterType="com.upimage.upimg.entity.User">
+      update user set pass_word=#{pass_word} where user_id=#{user_id}
+    </update>
+
+    <!--  更改数据  -->
+    <update id="updateuserdata" parameterType="com.upimage.upimg.entity.User">
+      update user set user_head=#{user_head},user_name=#{user_name} where user_id=#{user_id}
+    </update>
+
 </mapper>

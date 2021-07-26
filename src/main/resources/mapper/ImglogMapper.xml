@@ -29,4 +29,11 @@
     <delete id="imglogdelete" parameterType="com.upimage.upimg.entity.Imglog">
         delete from imglog where u_id=#{u_id} and imglog_id=#{imglog_id}
     </delete>
+
+    <!--  浏览加1  -->
+    <update id="browseimage" parameterType="com.upimage.upimg.entity.Imglog"  >
+        update imglog set browse=browse + 1 where imglog_id=#{imglog_id}
+    </update>
+
+
 </mapper>

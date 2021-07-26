@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.upimage.upimg.mapper.MailCodeMapper">
+    <select id="findAll" resultType="com.upimage.upimg.entity.MailCode">
+        SELECT * FROM user
+    </select>
+
+    <!--    添加-->
+    <insert id="insertmailcode" parameterType="com.upimage.upimg.entity.MailCode" useGeneratedKeys="true" keyProperty="mail_code_id">
+        insert into mail_code(user_number,code,created_at,updated_at) value (#{user_number},#{code},#{created_at},#{updated_at});
+    </insert>
+
+    <!--  更新  -->
+    <update id="updatemailcode" parameterType="com.upimage.upimg.entity.MailCode">
+        update mail_code set code=#{code} where user_number=#{user_number}
+    </update>
+
+
+    <!--  查询  -->
+    <select id="selectmailcode" parameterType="com.upimage.upimg.entity.MailCode" resultType="com.upimage.upimg.entity.MailCode">
+        select * from mail_code
+        <if test="user_number != null">
+            where user_number=#{user_number}
+        </if>
+        <if test="code != null">
+            and code=#{code}
+        </if>
+    </select>
+
+</mapper>
